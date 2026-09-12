@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* SLF dark navy theme — single source of truth */
+    --background: 218 74% 4%;        /* #050B14 */
+    --foreground: 210 40% 96%;       /* near white */
+
+    --card: 218 50% 7%;              /* slightly lighter navy */
+    --card-foreground: 210 40% 96%;
+
+    --border: 218 30% 14%;           /* subtle navy border */
+
+    --primary: 199 80% 42%;          /* steel cyan — calmer than cyan-400 */
+    --primary-foreground: 218 74% 4%;
+
+    --muted: 218 30% 12%;
+    --muted-foreground: 215 20% 50%;
+
+    --accent: 218 30% 12%;
+    --accent-foreground: 210 40% 96%;
+
+    --status-green: 142 71% 45%;
+    --status-amber: 38 92% 50%;
+    --status-red: 348 83% 47%;
+
+    --radius: 0.75rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    border-color: hsl(var(--border) / 1);
+  }
+
+  body {
+    background-color: hsl(var(--background) / 1);
+    color: hsl(var(--foreground) / 1);
+  }
 }

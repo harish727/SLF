@@ -1,0 +1,2075 @@
+# Fitness Coaching PWA — Frontend Development Specification
+
+## 1. GLOBAL DESIGN SYSTEM
+
+### 1.1 Design philosophy
+
+The application should feel like a professional performance/coaching platform.
+
+Primary principles:
+
+1. Training information must be immediately readable.
+2. The athlete should reach today's workout in one tap.
+3. Logging a set should require minimal interaction.
+4. Coaches should be able to manage many athletes without excessive navigation.
+5. Mobile is the primary athlete experience.
+6. Desktop is the primary coach experience.
+7. Avoid excessive decoration.
+8. Use visual hierarchy rather than large amounts of text.
+9. Important performance numbers should be visually prominent.
+10. Every action should provide immediate feedback.
+
+---
+
+# 2. GLOBAL RESPONSIVE BREAKPOINTS
+
+Use four layout states.
+
+### Mobile
+
+`< 640px`
+
+* Athlete primary target.
+* Bottom navigation.
+* One-column layout.
+* Full-width cards.
+* Large touch targets.
+* Minimal tables.
+
+### Tablet
+
+`640px – 1024px`
+
+* One/two-column layouts.
+* Collapsible navigation.
+* Larger charts.
+* Some tables converted into cards.
+
+### Desktop
+
+`1024px – 1440px`
+
+* Coach primary target.
+* Persistent sidebar.
+* Two/three-column dashboard.
+* Full tables.
+
+### Large desktop
+
+`> 1440px`
+
+* Maximum content width.
+* Do not continuously stretch cards.
+* Center content around `1200–1400px`.
+
+---
+
+# 3. GLOBAL PAGE STRUCTURE
+
+## Athlete
+
+```text
+┌─────────────────────────────┐
+│ Header                      │
+├─────────────────────────────┤
+│                             │
+│ Page Content                │
+│                             │
+│                             │
+├─────────────────────────────┤
+│ Bottom Navigation           │
+└─────────────────────────────┘
+```
+
+## Coach
+
+```text
+┌──────────────┬────────────────────────────┐
+│              │ Header                     │
+│ Sidebar      ├────────────────────────────┤
+│              │                            │
+│              │ Page Content               │
+│              │                            │
+└──────────────┴────────────────────────────┘
+```
+
+---
+
+# 4. GLOBAL COMPONENTS
+
+Create these before developing individual pages.
+
+```text
+components/
+│
+├── ui/
+│   ├── Button
+│   ├── IconButton
+│   ├── Input
+│   ├── Select
+│   ├── Textarea
+│   ├── Checkbox
+│   ├── Switch
+│   ├── Tabs
+│   ├── Card
+│   ├── Badge
+│   ├── Modal
+│   ├── Drawer
+│   ├── Dropdown
+│   ├── Tooltip
+│   ├── Toast
+│   ├── ProgressBar
+│   ├── Skeleton
+│   └── EmptyState
+│
+├── navigation/
+│   ├── AthleteHeader
+│   ├── AthleteBottomNav
+│   ├── CoachSidebar
+│   ├── CoachHeader
+│   ├── MobileDrawer
+│   └── Breadcrumb
+│
+├── charts/
+│   ├── LineChart
+│   ├── BarChart
+│   ├── AreaChart
+│   └── ProgressChart
+│
+└── common/
+    ├── Avatar
+    ├── DatePicker
+    ├── Search
+    ├── Filter
+    ├── StatusBadge
+    └── ConfirmDialog
+```
+
+---
+
+# 5. GLOBAL SPACING
+
+Use a consistent spacing scale.
+
+```text
+4px
+8px
+12px
+16px
+20px
+24px
+32px
+40px
+48px
+64px
+```
+
+Recommended:
+
+* Card internal padding: `16–24px`
+* Section spacing: `24–32px`
+* Page horizontal padding mobile: `16px`
+* Page horizontal padding desktop: `24–40px`
+* Button height: `44–48px`
+* Small button: `36–40px`
+* Input height: `44–48px`
+
+---
+
+# 6. GLOBAL CARD STYLE
+
+Cards should have:
+
+* Moderate corner radius: `12–16px`
+* Thin border
+* Very subtle shadow, if any
+* Consistent internal padding
+* Clear header/content separation
+
+Avoid excessive floating cards.
+
+Use cards primarily when they group related information.
+
+---
+
+# 7. GLOBAL TYPOGRAPHY
+
+Use one primary sans-serif font.
+
+Suggested:
+
+**Inter** or **Manrope**.
+
+Hierarchy:
+
+```text
+Page title       28–32px / bold
+Section title    18–22px / semibold
+Card title       15–18px / semibold
+Body             14–16px
+Secondary        12–14px
+Metric           28–40px / bold
+```
+
+Performance numbers should be larger than descriptive text.
+
+---
+
+# 8. AUTHENTICATION PAGES
+
+## 8.1 Login
+
+### Purpose
+
+Allow athlete/coach authentication.
+
+### Structure
+
+```text
+LoginPage
+│
+├── Logo
+├── WelcomeText
+├── LoginForm
+│   ├── EmailInput
+│   ├── PasswordInput
+│   ├── RememberMe
+│   └── LoginButton
+│
+├── ForgotPassword
+└── SignupLink
+```
+
+### Layout
+
+Desktop:
+
+```text
+Left: branding/visual
+Right: login form
+```
+
+Mobile:
+
+```text
+Logo
+Welcome
+Form
+Links
+```
+
+Form maximum width:
+
+`400px`
+
+### Navigation
+
+Successful login:
+
+```text
+Athlete → /athlete/dashboard
+Coach → /coach/dashboard
+```
+
+---
+
+# 9. ATHLETE APPLICATION
+
+# 9.1 Athlete Header
+
+Persistent on athlete pages.
+
+### Components
+
+```text
+AthleteHeader
+├── Logo
+├── PageTitle
+├── NotificationButton
+└── Avatar
+```
+
+Mobile:
+
+```text
+[Logo]              [🔔] [Avatar]
+```
+
+Do not make the header too tall.
+
+Recommended height:
+
+`56–64px`
+
+---
+
+# 9.2 Athlete Bottom Navigation
+
+Five primary destinations:
+
+```text
+Home
+Train
+Progress
+Messages
+More
+```
+
+### Component
+
+```text
+AthleteBottomNav
+├── HomeItem
+├── TrainItem
+├── ProgressItem
+├── MessagesItem
+└── MoreItem
+```
+
+Height:
+
+`64–72px`
+
+Always account for bottom safe-area padding on mobile devices.
+
+---
+
+# 10. ATHLETE DASHBOARD
+
+Route:
+
+`/athlete/dashboard`
+
+### Purpose
+
+Answer:
+
+> What do I need to do today?
+
+### Layout
+
+```text
+Dashboard
+│
+├── GreetingHeader
+├── ProgramStatus
+├── TodayWorkoutCard
+├── WeeklyProgressCard
+├── QuickStats
+├── CoachNoteCard
+└── RecentActivity
+```
+
+### Greeting
+
+Example:
+
+```text
+Good morning, Harish
+
+Thursday, September 10
+Week 6 • Day 4
+```
+
+Greeting:
+
+`24–28px`
+
+Date:
+
+`13–14px`
+
+---
+
+## TodayWorkoutCard
+
+This should be the largest card.
+
+```text
+TODAY'S TRAINING
+
+Lower Body
+Strength + Conditioning
+
+5 exercises
+~75 min
+
+[ START WORKOUT ]
+```
+
+Recommended:
+
+* Full width
+* `20–24px` padding
+* Primary CTA
+* Workout name prominently displayed
+
+Mobile height:
+
+Approximately `180–220px`
+
+Desktop:
+
+Maximum width around `600–700px`
+
+---
+
+## WeeklyProgressCard
+
+```text
+THIS WEEK
+
+● ● ● ● ○ ○ ○
+
+4 / 7 sessions
+
+57% complete
+```
+
+Components:
+
+```text
+WeeklyProgress
+DayIndicator
+ProgressBar
+```
+
+Use circular day indicators.
+
+---
+
+## QuickStats
+
+Three cards on desktop.
+
+```text
+BODYWEIGHT
+82.4 kg
+
+SQUAT
+160 kg
+
+PRs
+12
+```
+
+Mobile:
+
+Horizontal scrolling cards or 2-column grid.
+
+---
+
+## CoachNoteCard
+
+```text
+COACH NOTE
+
+"Keep today's squat around RPE 7.
+Don't chase weight."
+
+View full note →
+```
+
+---
+
+# 11. TRAINING PAGE
+
+Route:
+
+`/athlete/train`
+
+### Purpose
+
+Show the athlete's complete program.
+
+### Structure
+
+```text
+TrainingPage
+│
+├── CurrentProgramHeader
+├── ProgramProgress
+├── WeekSelector
+├── DaySelector
+└── WorkoutList
+```
+
+### Current Program
+
+```text
+POWERLIFTING PERFORMANCE
+12 Week Program
+
+Week 6 / 12
+```
+
+---
+
+## WeekSelector
+
+Desktop:
+
+Horizontal tabs.
+
+```text
+W1 W2 W3 W4 W5 W6 W7 W8 ...
+```
+
+Mobile:
+
+Horizontal scroll.
+
+Selected week should be visually obvious.
+
+---
+
+## DaySelector
+
+```text
+MON
+Lower
+
+TUE
+Upper
+
+THU
+Lower
+
+SAT
+Upper
+```
+
+---
+
+## WorkoutList
+
+Each workout:
+
+```text
+THURSDAY
+
+Lower Body
+
+5 exercises
+75 min
+
+✓ Completed
+```
+
+or:
+
+```text
+SATURDAY
+
+Upper Body
+
+6 exercises
+80 min
+
+START →
+```
+
+---
+
+# 12. WORKOUT PAGE
+
+Route:
+
+`/athlete/workouts/:workoutId`
+
+This is the most important execution page.
+
+### Structure
+
+```text
+WorkoutPage
+│
+├── WorkoutHeader
+├── WorkoutProgress
+├── WarmupSection
+├── ExerciseList
+│   └── ExerciseCard
+├── WorkoutNotes
+└── FinishWorkoutButton
+```
+
+---
+
+## WorkoutHeader
+
+```text
+← Back
+
+LOWER BODY
+
+Week 6 • Day 4
+
+5 Exercises • ~75 min
+```
+
+Mobile should keep this compact.
+
+---
+
+## WorkoutProgress
+
+```text
+3 / 5 exercises
+
+████████████░░░
+```
+
+---
+
+# 13. EXERCISE CARD
+
+### Structure
+
+```text
+ExerciseCard
+│
+├── ExerciseHeader
+│   ├── Number
+│   ├── Name
+│   └── Menu
+│
+├── Prescription
+├── PreviousPerformance
+├── SetLogger
+├── AddSet
+├── ExerciseVideo
+└── ExerciseNotes
+```
+
+Example:
+
+```text
+01  BACK SQUAT
+
+4 × 5 @ RPE 7
+
+Previous
+140 kg × 5 @ RPE 7
+
+SET     KG     REPS    RPE
+
+1       140      5      7
+2       140      5      7
+3       140      5      8
+4       140      5      8
+
+[ + ADD SET ]
+
+[ VIEW TECHNIQUE ]
+```
+
+---
+
+# 14. SET LOGGER
+
+The set logger must be designed for one-handed gym use.
+
+### Components
+
+```text
+SetRow
+├── SetNumber
+├── WeightInput
+├── RepInput
+├── RPESelector
+└── CompletionButton
+```
+
+### Input behavior
+
+Weight:
+
+```text
+[-] 140 [+]
+```
+
+Reps:
+
+```text
+[-] 5 [+]
+```
+
+RPE:
+
+```text
+6  7  8  9  10
+      ●
+```
+
+Avoid forcing the user to type every number.
+
+Remember previous values and prepopulate where appropriate.
+
+---
+
+# 15. EXERCISE DETAIL PAGE / MODAL
+
+Could be a full page on mobile and modal/drawer on desktop.
+
+```text
+ExerciseDetail
+│
+├── Video
+├── ExerciseName
+├── MuscleGroups
+├── Equipment
+├── Instructions
+├── CoachingCues
+├── CommonMistakes
+└── PreviousPerformance
+```
+
+Video should be responsive.
+
+Mobile video:
+
+`16:9`
+
+Full width.
+
+---
+
+# 16. WORKOUT COMPLETION
+
+Route:
+
+`/athlete/workouts/:id/complete`
+
+### Structure
+
+```text
+WorkoutComplete
+├── SuccessIcon
+├── Summary
+├── Duration
+├── Volume
+├── ExercisesCompleted
+├── AverageRPE
+├── SessionFeeling
+├── Notes
+└── FinishButton
+```
+
+Example:
+
+```text
+✓ WORKOUT COMPLETE
+
+Lower Body
+
+72 min
+5 / 5 exercises
+8,420 kg volume
+Average RPE 7.4
+
+How did you feel?
+
+😫  😐  🙂  🔥
+
+[ FINISH ]
+```
+
+---
+
+# 17. WORKOUT HISTORY
+
+Route:
+
+`/athlete/train/history`
+
+### Structure
+
+```text
+WorkoutHistory
+├── Filter
+├── Calendar
+└── WorkoutHistoryList
+```
+
+Each item:
+
+```text
+Sep 10
+Lower Body
+
+5 exercises
+72 min
+RPE 7.4
+
+✓ Completed
+```
+
+Filters:
+
+```text
+All
+Strength
+Conditioning
+Completed
+Missed
+```
+
+---
+
+# 18. PROGRESS PAGE
+
+Route:
+
+`/athlete/progress`
+
+### Header
+
+```text
+YOUR PROGRESS
+```
+
+Tabs:
+
+```text
+Strength
+Body
+Conditioning
+PRs
+```
+
+---
+
+# 19. STRENGTH PROGRESS
+
+### Structure
+
+```text
+StrengthProgress
+├── ExerciseSelector
+├── CurrentPRCard
+├── ProgressChart
+├── RecentSessions
+└── ExerciseHistory
+```
+
+Example:
+
+```text
+BACK SQUAT
+
+160 kg
++5 kg
+
+[ GRAPH ]
+
+W1  W2  W3  W4  W5  W6
+```
+
+Time selector:
+
+```text
+30D
+3M
+6M
+1Y
+ALL
+```
+
+---
+
+# 20. BODYWEIGHT PAGE
+
+```text
+BodyProgress
+├── CurrentWeight
+├── GoalWeight
+├── WeightChange
+├── WeightChart
+├── MeasurementCards
+└── History
+```
+
+Example:
+
+```text
+BODYWEIGHT
+
+82.4 kg
+
+↓ 1.6 kg
+
+Goal
+80 kg
+
+[ GRAPH ]
+```
+
+Measurement cards:
+
+```text
+Waist
+Chest
+Arm
+Thigh
+```
+
+---
+
+# 21. PR PAGE
+
+```text
+PRPage
+├── PRSummary
+├── PRList
+└── RecentPRs
+```
+
+PR card:
+
+```text
+🏆 BACK SQUAT
+
+160 kg
+
+September 2026
+
+Previous
+155 kg
+
++5 kg
+```
+
+---
+
+# 22. MESSAGES PAGE
+
+Route:
+
+`/athlete/messages`
+
+### Structure
+
+```text
+Messages
+├── ConversationList
+└── Conversation
+```
+
+Mobile:
+
+Conversation list → tap → full conversation.
+
+Desktop:
+
+```text
+ConversationList | Conversation
+```
+
+Message components:
+
+```text
+MessageBubble
+MessageInput
+AttachmentButton
+SendButton
+TypingIndicator
+```
+
+---
+
+# 23. MORE PAGE
+
+Route:
+
+`/athlete/more`
+
+Simple menu.
+
+```text
+MORE
+
+Nutrition
+Goals
+Documents
+Profile
+Settings
+
+────────────
+
+Help
+Logout
+```
+
+Avoid making this a complicated dashboard.
+
+---
+
+# 24. NUTRITION PAGE
+
+Route:
+
+`/athlete/nutrition`
+
+### Structure
+
+```text
+Nutrition
+├── DailyTarget
+├── MacroSummary
+├── MealList
+├── WaterTracker
+└── NutritionNotes
+```
+
+Top:
+
+```text
+TODAY
+
+2,400 kcal
+
+Protein 180g
+Carbs 250g
+Fat 70g
+```
+
+Meal card:
+
+```text
+BREAKFAST
+
+650 kcal
+
+Protein 40g
+Carbs 70g
+Fat 20g
+
+View meal →
+```
+
+---
+
+# 25. PROFILE PAGE
+
+```text
+Profile
+├── ProfileHeader
+├── PersonalInformation
+├── TrainingInformation
+├── Goals
+├── CoachInformation
+└── AccountSettings
+```
+
+Don't expose sensitive information unnecessarily.
+
+---
+
+# 26. COACH APPLICATION
+
+Coach application uses a desktop sidebar.
+
+## Sidebar
+
+```text
+YOUR BRAND
+
+Dashboard
+
+TRAINING
+├── Athletes
+├── Programs
+├── Exercises
+└── Calendar
+
+ANALYTICS
+├── Performance
+└── Reports
+
+COMMUNICATION
+└── Messages
+
+SYSTEM
+├── Settings
+└── Logout
+```
+
+Sidebar width:
+
+Approximately `240–280px`.
+
+Collapsible to icon-only mode.
+
+---
+
+# 27. COACH DASHBOARD
+
+Route:
+
+`/coach/dashboard`
+
+Purpose:
+
+> Show what requires the coach's attention.
+
+### Structure
+
+```text
+CoachDashboard
+├── Header
+├── KPIGrid
+├── AttentionRequired
+├── Today'sTraining
+├── RecentActivity
+└── PerformanceOverview
+```
+
+---
+
+## KPIGrid
+
+```text
+42
+ACTIVE ATHLETES
+
+84%
+WORKOUT COMPLETION
+
+91%
+AVG ADHERENCE
+
+4
+NEEDS ATTENTION
+```
+
+Desktop:
+
+4 cards in one row.
+
+Mobile:
+
+2 × 2 grid.
+
+---
+
+# 28. ATTENTION REQUIRED
+
+This is more important than generic analytics.
+
+```text
+NEEDS ATTENTION
+
+⚠ Rahul
+High RPE for 3 sessions
+
+⚠ Ankit
+Missed 2 workouts
+
+⚠ Vijay
+Performance dropped 8%
+
+[ REVIEW ALL ]
+```
+
+Each alert is clickable.
+
+---
+
+# 29. ATHLETES PAGE
+
+Route:
+
+`/coach/athletes`
+
+### Structure
+
+```text
+AthletesPage
+├── PageHeader
+├── SearchBar
+├── Filters
+├── AthleteStats
+└── AthleteTable
+```
+
+Desktop table:
+
+```text
+Athlete | Program | Weight | Adherence | Last Workout | Status
+```
+
+Mobile:
+
+Convert rows into cards.
+
+---
+
+# 30. ATHLETE PROFILE — COACH VIEW
+
+Route:
+
+`/coach/athletes/:athleteId`
+
+### Header
+
+```text
+← Athletes
+
+Rahul Kumar
+
+Active
+Week 6 / 12
+```
+
+Tabs:
+
+```text
+Overview
+Training
+Progress
+Nutrition
+Notes
+Messages
+```
+
+---
+
+## Overview
+
+```text
+AthleteOverview
+├── AthleteSummary
+├── CurrentProgram
+├── KeyMetrics
+├── RecentWorkouts
+├── Alerts
+└── CoachNotes
+```
+
+Key metrics:
+
+```text
+82.4 kg
+160 kg squat
+91% adherence
+12 PRs
+```
+
+---
+
+# 31. PROGRAMS PAGE
+
+Route:
+
+`/coach/programs`
+
+### Structure
+
+```text
+Programs
+├── PageHeader
+├── Search
+├── Filters
+├── ProgramCards
+└── CreateProgramButton
+```
+
+Program card:
+
+```text
+POWERLIFTING BLOCK
+
+12 weeks
+
+18 athletes assigned
+
+Active
+
+[ OPEN ]
+```
+
+---
+
+# 32. PROGRAM BUILDER
+
+Route:
+
+`/coach/programs/:id`
+
+This should be a desktop-optimized workspace.
+
+### Layout
+
+```text
+┌────────────┬───────────────────────────────┐
+│ Weeks      │ Workout Builder               │
+│            │                               │
+│ Week 1     │ Monday                        │
+│ Week 2     │ ┌───────────────────────────┐ │
+│ Week 3     │ │ Back Squat                │ │
+│ Week 4     │ │ 4 × 5 @ 70%              │ │
+│ ...        │ └───────────────────────────┘ │
+│            │                               │
+└────────────┴───────────────────────────────┘
+```
+
+Components:
+
+```text
+ProgramBuilder
+├── ProgramHeader
+├── WeekSidebar
+├── DaySelector
+├── WorkoutBuilder
+│   ├── ExerciseBlock
+│   ├── PrescriptionEditor
+│   ├── RestEditor
+│   ├── NotesEditor
+│   └── DragHandle
+├── ExerciseSelector
+└── SaveBar
+```
+
+---
+
+# 33. EXERCISE LIBRARY
+
+Route:
+
+`/coach/exercises`
+
+### Layout
+
+```text
+ExerciseLibrary
+├── Header
+├── Search
+├── CategoryFilters
+├── ExerciseGrid
+└── AddExercise
+```
+
+Exercise card:
+
+```text
+[ IMAGE / VIDEO ]
+
+Back Squat
+
+Strength
+Barbell
+
+[ OPEN ]
+```
+
+---
+
+# 34. EXERCISE EDITOR
+
+```text
+ExerciseEditor
+├── ExerciseName
+├── Category
+├── Equipment
+├── MuscleGroups
+├── VideoUpload
+├── ImageUpload
+├── Instructions
+├── CoachingCues
+├── CommonMistakes
+└── SaveButton
+```
+
+---
+
+# 35. CALENDAR PAGE
+
+Route:
+
+`/coach/calendar`
+
+Desktop:
+
+Monthly/weekly calendar.
+
+```text
+September 2026
+
+MON TUE WED THU FRI SAT SUN
+...
+```
+
+Clicking a day:
+
+```text
+September 10
+
+28 workouts scheduled
+21 completed
+4 pending
+3 missed
+```
+
+Filters:
+
+```text
+All athletes
+Program
+Workout type
+Completed
+Pending
+Missed
+```
+
+---
+
+# 36. ANALYTICS PAGE
+
+Route:
+
+`/coach/analytics`
+
+Tabs:
+
+```text
+Overview
+Adherence
+Performance
+Bodyweight
+Training Load
+```
+
+### Analytics cards
+
+```text
+Workout Completion
+84%
+
+Average RPE
+7.4
+
+Average Weekly Volume
+42,500 kg
+
+PRs This Month
+18
+```
+
+Charts should have:
+
+* Clear labels
+* Tooltips
+* Date filtering
+* Athlete filtering
+* Program filtering
+
+Avoid showing more than 4–6 charts on the first screen.
+
+---
+
+# 37. COACH MESSAGES
+
+Desktop:
+
+```text
+┌────────────────┬────────────────────────────┐
+│ Conversations  │ Rahul                      │
+│                │                            │
+│ Rahul          │ Message history            │
+│ Ankit          │                            │
+│ Vijay          │                            │
+│                │ [ Type message... ]        │
+└────────────────┴────────────────────────────┘
+```
+
+Include unread indicators.
+
+---
+
+# 38. COACH SETTINGS
+
+Sections:
+
+```text
+Profile
+Coaching Preferences
+Notifications
+Program Defaults
+Units
+Payment Settings
+Account
+```
+
+Units:
+
+```text
+KG / LB
+KM / MILES
+```
+
+---
+
+# 39. GLOBAL MODALS
+
+Build these once and reuse them.
+
+### Add Athlete
+
+```text
+Name
+Email
+Phone
+Goal
+Program
+Start Date
+
+[ CANCEL ] [ CREATE ]
+```
+
+### Assign Program
+
+```text
+Athlete
+Program
+Start Date
+
+[ ASSIGN ]
+```
+
+### Add Exercise
+
+```text
+Search
+Exercise
+Sets
+Reps
+RPE
+Rest
+
+[ ADD ]
+```
+
+### Confirm Delete
+
+```text
+Delete this program?
+
+This action cannot be undone.
+
+[ CANCEL ] [ DELETE ]
+```
+
+---
+
+# 40. GLOBAL STATES
+
+Every data-driven page must support four states.
+
+## Loading
+
+Use skeletons.
+
+Example:
+
+```text
+████████████
+██████
+████████████████
+```
+
+Avoid full-screen spinners unless absolutely necessary.
+
+---
+
+## Empty
+
+Example:
+
+```text
+NO WORKOUTS YET
+
+Your coach hasn't assigned your first workout.
+
+```
+
+Provide the next logical action where applicable.
+
+---
+
+## Error
+
+```text
+Something went wrong.
+
+We couldn't load your workout.
+
+[ TRY AGAIN ]
+```
+
+---
+
+## Success
+
+Use toast/snackbar:
+
+```text
+✓ Workout saved
+```
+
+Do not interrupt the user with unnecessary modal confirmations.
+
+---
+
+# 41. NAVIGATION RULES
+
+### Athlete
+
+Primary navigation:
+
+```text
+Home
+Train
+Progress
+Messages
+More
+```
+
+Secondary navigation should always provide a back action.
+
+Example:
+
+```text
+Home
+ ↓
+Today's Workout
+ ↓
+Back Squat
+ ↓
+Exercise Details
+```
+
+Back should return to the previous meaningful screen.
+
+---
+
+### Coach
+
+Primary navigation:
+
+```text
+Dashboard
+Athletes
+Programs
+Exercises
+Calendar
+Analytics
+Messages
+Settings
+```
+
+Use breadcrumbs for deep pages.
+
+Example:
+
+```text
+Programs
+ / Powerlifting Block
+ / Week 6
+ / Thursday
+ / Lower Body
+```
+
+---
+
+# 42. MOBILE-SPECIFIC RULES
+
+Athlete mobile screens should generally use:
+
+```text
+16px horizontal padding
+16–24px card padding
+44–48px minimum buttons
+48px minimum input height
+```
+
+Avoid:
+
+* Tiny tables
+* Tiny icons
+* Hover-only interactions
+* Dense desktop layouts
+* Multiple simultaneous modals
+
+For workout logging, prioritize:
+
+```text
+Thumb → Input → Save → Next Set
+```
+
+---
+
+# 43. DESKTOP-SPECIFIC RULES
+
+Coach desktop should prioritize:
+
+```text
+Information density
+Comparison
+Filtering
+Bulk actions
+Keyboard navigation
+Tables
+Charts
+```
+
+For example:
+
+```text
+Athletes
+──────────────────────────────────────
+Search
+
+42 athletes
+
+Name       Program     Adherence   Status
+Rahul      Strength      91%       Active
+Ankit      Fat Loss      87%       Active
+Vijay      Powerlift     62%       ⚠
+```
+
+---
+
+# 44. BUTTON HIERARCHY
+
+### Primary
+
+Use for the most important action.
+
+```text
+START WORKOUT
+SAVE PROGRAM
+ASSIGN PROGRAM
+```
+
+### Secondary
+
+```text
+VIEW DETAILS
+EDIT
+ADD EXERCISE
+```
+
+### Tertiary
+
+Text/icon actions.
+
+```text
+View all →
+```
+
+### Destructive
+
+Only for:
+
+```text
+Delete
+Remove
+Cancel subscription
+```
+
+---
+
+# 45. COMPONENT NAMING
+
+Use predictable React component names.
+
+Example:
+
+```text
+TodayWorkoutCard.tsx
+WeeklyProgressCard.tsx
+ExerciseCard.tsx
+SetLogger.tsx
+WorkoutProgress.tsx
+AthleteHeader.tsx
+AthleteBottomNav.tsx
+
+CoachSidebar.tsx
+AthleteTable.tsx
+ProgramBuilder.tsx
+WorkoutBuilder.tsx
+ExerciseSelector.tsx
+```
+
+Avoid generic names like:
+
+```text
+Box.tsx
+Thing.tsx
+MainCard.tsx
+Component1.tsx
+```
+
+---
+
+# 46. ROUTE STRUCTURE
+
+Recommended:
+
+```text
+/
+├── login
+├── signup
+│
+├── athlete
+│   ├── dashboard
+│   ├── train
+│   ├── train/history
+│   ├── workouts/[id]
+│   ├── workouts/[id]/complete
+│   ├── progress
+│   ├── nutrition
+│   ├── messages
+│   ├── profile
+│   ├── settings
+│   └── more
+│
+└── coach
+    ├── dashboard
+    ├── athletes
+    ├── athletes/[id]
+    ├── programs
+    ├── programs/[id]
+    ├── exercises
+    ├── exercises/[id]
+    ├── calendar
+    ├── analytics
+    ├── messages
+    └── settings
+```
+
+---
+
+# 47. FRONTEND DEVELOPMENT PRIORITY
+
+Do NOT build every page simultaneously.
+
+Build in this order:
+
+## Sprint 1 — Design system
+
+```text
+Colors
+Typography
+Buttons
+Inputs
+Cards
+Tabs
+Modal
+Toast
+Navigation
+```
+
+## Sprint 2 — Authentication
+
+```text
+Login
+Signup
+Forgot Password
+Role Routing
+```
+
+## Sprint 3 — Athlete shell
+
+```text
+Header
+Bottom Navigation
+Dashboard
+```
+
+## Sprint 4 — Workout experience
+
+```text
+Training
+Workout
+Exercise Card
+Set Logger
+Workout Completion
+History
+```
+
+## Sprint 5 — Coach shell
+
+```text
+Sidebar
+Header
+Dashboard
+```
+
+## Sprint 6 — Coach management
+
+```text
+Athletes
+Athlete Profile
+Programs
+Program Builder
+Exercise Library
+```
+
+## Sprint 7 — Progress
+
+```text
+Strength
+Bodyweight
+PRs
+Analytics
+Charts
+```
+
+## Sprint 8 — Communication
+
+```text
+Messages
+Notifications
+Coach Notes
+```
+
+## Sprint 9 — Nutrition
+
+```text
+Nutrition
+Meals
+Macros
+Water
+```
+
+## Sprint 10 — PWA
+
+```text
+Manifest
+Service Worker
+Offline
+Install
+Push Notifications
+```
+
+---
+
+# 48. MOST IMPORTANT USER FLOWS
+
+Before considering the frontend complete, these flows must work smoothly.
+
+### Athlete
+
+```text
+Login
+ ↓
+Dashboard
+ ↓
+Start Workout
+ ↓
+Exercise
+ ↓
+Log Set
+ ↓
+Next Set
+ ↓
+Next Exercise
+ ↓
+Finish Workout
+ ↓
+Workout Summary
+```
+
+### Coach
+
+```text
+Login
+ ↓
+Dashboard
+ ↓
+Athletes
+ ↓
+Athlete
+ ↓
+Review Performance
+ ↓
+Program
+ ↓
+Edit Workout
+ ↓
+Save
+```
+
+### New athlete
+
+```text
+Coach
+ ↓
+Add Athlete
+ ↓
+Create/Select Program
+ ↓
+Assign Program
+ ↓
+Athlete receives program
+```
+
+---
+
+# 49. FINAL FRONTEND ARCHITECTURE
+
+The overall frontend should ultimately look like:
+
+```text
+                    FITNESS COACHING PWA
+                             │
+              ┌──────────────┴──────────────┐
+              │                             │
+           ATHLETE                         COACH
+              │                             │
+       Mobile-first                    Desktop-first
+              │                             │
+      ┌───────┼────────┐             ┌──────┼─────────┐
+      │       │        │             │      │         │
+     Home   Train   Progress      Athletes Programs Analytics
+      │       │        │             │      │         │
+      │       │        │             │      │         │
+      └───────┼────────┘             └──────┼─────────┘
+              │                             │
+              └──────────────┬──────────────┘
+                             │
+                       Shared Components
+                             │
+                 ┌───────────┼───────────┐
+                 │           │           │
+                UI        Charts      Forms
+                 │           │           │
+                 └───────────┼───────────┘
+                             │
+                          Next.js
+                             │
+                         Supabase
+```
+
+# 50. The key product rule
+
+The frontend should always prioritize **the next action**.
+
+For the athlete:
+
+> **What do I need to do today?**
+
+For the coach:
+
+> **Which athlete needs my attention?**
+
+For progress:
+
+> **Am I getting better?**
+
+For the program builder:
+
+> **What am I prescribing next?**
+
+If every screen follows those four principles, the application will feel like a **coaching platform**, rather than just another workout-tracking app.
